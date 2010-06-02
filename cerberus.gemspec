@@ -1,5 +1,5 @@
 Gem::Specification.new do |s| 
-  s.name = 'cerberus'
+  s.name = 'rack-cerberus'
   s.version = "0.0.1"
   s.platform = Gem::Platform::RUBY
   s.summary = "A Rack middleware for form-based authentication"
