@@ -4,6 +4,11 @@
 
 Cerberus is a Rack middleware for form-based authentication. Its purpose is only 
 to offer a nicer (or more actual) replacement for Basic HTTP authentication.
+
+Install with:
+
+	# sudo gem install rack-cerberus
+
 You can use it almost the same way you use <tt>Rack::Auth::Basic</tt>:
 
 	use Rack::Session::Cookie
