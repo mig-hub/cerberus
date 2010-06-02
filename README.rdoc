@@ -30,6 +30,12 @@ Which is used that way:
 Just like <tt>Rack::Auth::Basic</tt>, Cerberus yields login and pass, and delegate authentication
 to the block you send it which should return a boolean.
 
+If you want to see a concrete example, go into the Cerberus directory and run:
+
+	# rackup example.ru
+	
+It's gonna start the example at http://localhost:9292
+
 === Copyright
 
 (c) 2010 Mickael Riga - see MIT_LICENCE for details 
