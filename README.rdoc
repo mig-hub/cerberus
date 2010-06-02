@@ -11,6 +11,7 @@ Install with:
 
 You can use it almost the same way you use <tt>Rack::Auth::Basic</tt>:
 
+	require 'cerberus'
 	use Rack::Session::Cookie
 	use Cerberus do |login, pass|
 		pass=='secret'
