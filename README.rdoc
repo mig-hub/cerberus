@@ -4,7 +4,7 @@
 
 Cerberus is a Rack middleware for form-based authentication. Its purpose is only 
 to offer a nicer (or more actual) replacement for Basic HTTP authentication.
-You can use it almost the same way you use <tt>Rack::Auth::Basic</tt> :
+You can use it almost the same way you use <tt>Rack::Auth::Basic</tt>:
 
 	use Cerberus do |login, pass|
 		pass=='secret'
@@ -17,11 +17,13 @@ There is an optional hash you can add for personalizing it. Options are:
 * <tt>:bg_color</tt> (background color)
 * <tt>:icon_url</tt> (for a company logo or any icon)
 
+Which is used that way:
+
 	use Cerberus, {:company_name => 'Nintendo'} do |login, pass|
 		pass=='secret'
 	end
 	
-Just like <tt>Rack::Auth::Basic+, Cerberus yields login and pass, and delegate authentication
+Just like <tt>Rack::Auth::Basic</tt>, Cerberus yields login and pass, and delegate authentication
 to the block you send it which should return a boolean.
 
 === Copyright
