@@ -42,6 +42,12 @@ If you want to see a concrete example, go into the Cerberus directory and run:
 	
 It's gonna start the example at http://localhost:9292
 
+=== Help
+
+If you need some help, let's join my IRC channel: #mighub
+
+If you want to help me, don't hesitate to fork that project on Github or send patches.
+
 === Copyright
 
 (c) 2010 Mickael Riga - see MIT_LICENCE for details 
