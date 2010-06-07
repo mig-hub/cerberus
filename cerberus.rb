@@ -34,7 +34,7 @@ class Cerberus
     <form action="%s" method="post" accept-charset="utf-8">	
     	<input type="text" name="cerberus_login" value="login" id='login'><br />
     	<input type="password" name="cerberus_pass" value="pass" id='pass'>
-    	<p><input type="submit" value="Log me &rarr;"></p>
+    	<p><input type="submit" value="LOG ME &rarr;"></p>
     </form>
     <script type="text/javascript" charset="utf-8">
     	var login = document.getElementById('login');
