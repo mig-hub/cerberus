@@ -48,6 +48,11 @@ If you need some help, let's join my IRC channel: #mighub
 
 If you want to help me, don't hesitate to fork that project on Github or send patches.
 
+=== Changelog
+
+0.0.1 Changed Everything somehow
+0.1.0 Make it possible to authenticate through GET request (for restful APIs)
+
 === Copyright
 
 (c) 2010 Mickael Riga - see MIT_LICENCE for details 

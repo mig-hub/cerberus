@@ -21,7 +21,7 @@ describe 'cerberus' do
   end
   
   should 'Give access with the appropriate login and pass' do
-    res = req.post('/', :params => {'cerberus_login' => 'mario', 'cerberus_pass' => 'bros'})
+    res = req.get('/', :params => {'cerberus_login' => 'mario', 'cerberus_pass' => 'bros'})
     cookie = res["Set-Cookie"]
     res.status.should==200
   end
