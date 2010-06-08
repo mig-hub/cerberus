@@ -42,6 +42,12 @@ If you want to see a concrete example, go into the Cerberus directory and run:
 	
 It's gonna start the example at http://localhost:9292
 
+=== Logout
+
+Any request to <tt>/logout</tt> on the path where the middleware is mounted will log you out.
+In other words, if you put the middleware at <tt>/admin</tt>, query <tt>/admin/logout</tt> to be
+logged out. Pretty simple.
+
 === Help
 
 If you need some help, let's join my IRC channel: #mighub
