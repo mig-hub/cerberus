@@ -3,7 +3,16 @@ use Rack::Session::Cookie
 
 map '/' do
   run lambda {|env|
-    body = "<html><head><title>Cerberus</title></head><body>This page is public, so you can see it. But what happens if you want to see a <a href='/secret'>Secret Page</a>? Nevertheless, I can give you access:<br /><br />Login: <b>mario</b><br />Pass: <b>bros</b></body></html>"
+    body = <<-EOB.strip
+    <html>
+      <head>
+        <title>Cerberus</title>
+      </head>
+      <body>This page is public, so you can see it. But what happens if you want to see a <a href='/secret'>Secret Page</a>? Nevertheless, I can give you access:<br /><br />
+        Login: <b>mario</b><br />Pass: <b>bros</b>
+      </body>
+    </html>
+    EOB
     [200, {'Content-Type' => 'text/html'}, body]
   }
 end
