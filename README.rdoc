@@ -58,6 +58,7 @@ If you want to help me, don't hesitate to fork that project on Github or send pa
 
 	0.0.1 Changed Everything somehow
 	0.1.0 Make it possible to authenticate through GET request (for restful APIs)
+	0.1.1 Documentation improvement
 
 === Copyright
 
