@@ -13,6 +13,12 @@ describe 'cerberus' do
   req = Rack::MockRequest.new(app)
   cookie = ''
   
+  should 'Raise if there is no session' do
+    no_session_app = Cerberus.new(secret_app, {}) {|login,pass| [login,pass]==['mario','bros']}
+    no_session_req = Rack::MockRequest.new(no_session_app)
+    lambda { no_session_req.get('/') }.should.raise(RuntimeError).message.should=='Cerberus cannot work without Session'
+  end
+  
   should 'Stop request if you are not already logged in or currently successfully logging' do
     res = req.get('/')
     res.status.should==401

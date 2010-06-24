@@ -17,7 +17,7 @@ class Cerberus
     }
     div { 
       width: 400px;
-      margin: 0px auto;
+      margin: 30px auto;
       padding: 10px;
       border-radius: 5px;
       -moz-border-radius: 5px;
@@ -30,11 +30,11 @@ class Cerberus
     <h1>%s</h1>
     %s
     %s
-    <p>Please authenticate yourself</p>
+    <p>Please Sign In</p>
     <form action="%s" method="post" accept-charset="utf-8">	
     	<input type="text" name="cerberus_login" value="login" id='login'><br />
     	<input type="password" name="cerberus_pass" value="pass" id='pass'>
-    	<p><input type="submit" value="LOG ME IN &rarr;"></p>
+    	<p><input type="submit" value="SIGN IN &rarr;"></p>
     </form>
     <script type="text/javascript" charset="utf-8">
     	var login = document.getElementById('login');
@@ -66,6 +66,7 @@ PAGE
   end
   
   def _call(env)
+    raise 'Cerberus cannot work without Session' if env['rack.session'].nil?
     req = Rack::Request.new(env)
     login = req['cerberus_login']
     pass = req['cerberus_pass']

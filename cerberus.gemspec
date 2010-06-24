@@ -1,9 +1,9 @@
 Gem::Specification.new do |s| 
   s.name = 'rack-cerberus'
-  s.version = "0.1.1"
+  s.version = "0.1.2"
   s.platform = Gem::Platform::RUBY
   s.summary = "A Rack middleware for form-based authentication"
-  s.description = "A Rack middleware for form-based authentication"
+  s.description = "A Rack middleware for form-based authentication. Aim is a compromise between fonctionality, beauty and customization."
   s.files = `git ls-files`.split("\n").sort
   s.test_files = ['spec.rb']
   s.require_path = '.'
