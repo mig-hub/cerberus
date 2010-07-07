@@ -48,4 +48,10 @@ describe 'cerberus' do
     res.status.should==401
   end
   
+  should 'Not send not_found when logging after a logout (because the path is /logout)' do
+    res = req.get('/logout', :params => {'cerberus_login' => 'mario', 'cerberus_pass' => 'bros'})
+    res.status.should==302
+    res['Location'].should=='/'
+  end
+  
 end

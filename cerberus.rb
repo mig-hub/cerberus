@@ -73,7 +73,13 @@ PAGE
     err = req.post? ? "<p class='err'>Wrong login or password</p>" : ''
     if ((env['rack.session']['cerberus_user']!=nil && env['PATH_INFO']!='/logout') || (login && pass && @block.call(login, pass)))
       env['rack.session']['cerberus_user'] ||= login
-      @app.call(env)
+      if env['PATH_INFO']=='/logout'
+        res = Rack::Response.new(env)
+        res.redirect('/')
+        res.finish
+      else
+        @app.call(env)
+      end
     else
       env['rack.session'].delete('cerberus_user')
       icon = @options[:icon_url].nil? ? '' : "<img src='#{@options[:icon_url]}' /><br />"
