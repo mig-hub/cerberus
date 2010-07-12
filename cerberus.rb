@@ -75,7 +75,7 @@ PAGE
       env['rack.session']['cerberus_user'] ||= login
       if env['PATH_INFO']=='/logout'
         res = Rack::Response.new(env)
-        res.redirect('/')
+        res.redirect(env['SCRIPT_NAME']=='' ? '/' : env['SCRIPT_NAME'])
         res.finish
       else
         @app.call(env)

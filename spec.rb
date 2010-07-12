@@ -52,6 +52,11 @@ describe 'cerberus' do
     res = req.get('/logout', :params => {'cerberus_login' => 'mario', 'cerberus_pass' => 'bros'})
     res.status.should==302
     res['Location'].should=='/'
+    
+    req = Rack::MockRequest.new(Rack::URLMap.new({'/backend' => app}))
+    res = req.get('/backend/logout', :params => {'cerberus_login' => 'mario', 'cerberus_pass' => 'bros'})
+    res.status.should==302
+    res['Location'].should=='/backend'
   end
   
 end
