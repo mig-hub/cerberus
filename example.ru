@@ -1,5 +1,5 @@
 require ::File.dirname(__FILE__) + '/cerberus'
-use Rack::Session::Cookie
+use Rack::Session::Cookie :secret => 'change_me'
 
 map '/' do
   run lambda {|env|
