@@ -1,5 +1,8 @@
 class Cerberus
   
+  class NoSessionError < RuntimeError
+  end
+  
   AUTH_PAGE = <<-PAGE
   <html><head>
     <title>%s Authentication</title>
@@ -66,7 +69,7 @@ PAGE
   end
   
   def _call(env)
-    raise 'Cerberus cannot work without Session' if env['rack.session'].nil?
+    raise(NoSessionError, 'Cerberus cannot work without Session') if env['rack.session'].nil?
     req = Rack::Request.new(env)
     login = req['cerberus_login']
     pass = req['cerberus_pass']
