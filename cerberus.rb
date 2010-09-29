@@ -8,7 +8,7 @@ class Cerberus
     <title>%s Authentication</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <style type='text/css'>
-    body { background-color: %s; font-family: sans-serif; }
+    body { background-color: %s; font-family: sans-serif; text-align: center; }
     h1, p { color: %s; }
     .err {
       padding: 5px;
@@ -19,6 +19,7 @@ class Cerberus
       background-color: red;
     }
     div { 
+      text-align: left;
       width: 400px;
       margin: 30px auto;
       padding: 10px;
