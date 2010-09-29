@@ -60,6 +60,7 @@ If you want to help me, don't hesitate to fork that project on Github or send pa
 	0.1.2 Raise message when using without session
 	0.1.3 Don't go to page /logout when signing in after a logout (redirect to / instead)
 	0.1.4 Fix /logout redirect so that it works with mapping
+	0.1.5 Fix CSS and Javascript for IE (Yes I'm too kind)
 
 === Copyright
 
