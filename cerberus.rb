@@ -43,10 +43,10 @@ class Cerberus
     <script type="text/javascript" charset="utf-8">
     	var login = document.getElementById('login');
     	var pass = document.getElementById('pass');
-    	focus = function() {
+    	var focus = function() {
     		if (this.value==this.id) this.value = '';
     	}
-    	blur = function() {
+    	var blur = function() {
     		if (this.value=='') this.value = this.id;
     	}	
     	login.onfocus = focus;
