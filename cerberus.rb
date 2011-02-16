@@ -87,7 +87,7 @@ PAGE
     else
       env['rack.session'].delete('cerberus_user')
       icon = @options[:icon_url].nil? ? '' : "<img src='#{@options[:icon_url]}' /><br />"
-      [401, {'Content-Type' => 'text/html'}, AUTH_PAGE % [@options[:company_name], @options[:bg_color], @options[:bg_color], @options[:fg_color], @options[:company_name], icon, err, env['REQUEST_URI']]]
+      [401, {'Content-Type' => 'text/html'}, [AUTH_PAGE % [@options[:company_name], @options[:bg_color], @options[:bg_color], @options[:fg_color], @options[:company_name], icon, err, env['REQUEST_URI']]]]
     end
   end
   

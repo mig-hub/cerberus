@@ -22,6 +22,7 @@ describe 'cerberus' do
   should 'Stop request if you are not already logged in or currently successfully logging' do
     res = req.get('/')
     res.status.should==401
+    res.body.class==String
     res = req.post('/', :params => {'cerberus_login' => 'fake', 'cerberus_pass' => 'fake'})
     res.status.should==401
   end
