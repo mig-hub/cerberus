@@ -7,7 +7,7 @@ class Cerberus
     <title>%s Authentication</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <style type='text/css'>
-    body { background-color: %s; font-family: sans-serif; text-align: center; }
+    body { background-color: %s; font-family: sans-serif; text-align: center; margin: 0px; }
     h1, p { color: %s; }
     .err {
       padding: 5px;
@@ -20,11 +20,14 @@ class Cerberus
     div { 
       text-align: left;
       width: 400px;
-      margin: 30px auto;
+      margin: 0px auto;
       padding: 10px;
-      border-radius: 5px;
-      -moz-border-radius: 5px;
-      -webkit-border-radius: 5px;
+      -webkit-border-bottom-left-radius: 10px;
+      -moz-border-radius-bottomleft: 10px;
+      border-bottom-left-radius: 10px;
+      -webkit-border-bottom-right-radius: 10px;
+      -moz-border-radius-bottomright: 10px;
+      border-bottom-right-radius: 10px;
       background-color: %s; }
     input { width: 400px; font-size: 20px; }
     </style>
@@ -59,7 +62,13 @@ PAGE
   
   def initialize(app, options={}, &block)
     @app = app
-    defaults = { :company_name => 'Cerberus', :bg_color => '#333', :fg_color => '#555', :icon_url => nil}
+    defaults = { 
+      :company_name => 'Cerberus', 
+      :bg_color => '#999', 
+      :fg_color => '#CCC', 
+      :text_color => '#FFF', 
+      :icon_url => nil
+    }
     @options = defaults.merge(options)
     @block = block
   end
@@ -86,7 +95,7 @@ PAGE
     else
       env['rack.session'].delete('cerberus_user')
       icon = @options[:icon_url].nil? ? '' : "<img src='#{@options[:icon_url]}' /><br />"
-      [401, {'Content-Type' => 'text/html'}, [AUTH_PAGE % [@options[:company_name], @options[:bg_color], @options[:bg_color], @options[:fg_color], @options[:company_name], icon, err, env['REQUEST_URI']]]]
+      [401, {'Content-Type' => 'text/html'}, [AUTH_PAGE % [@options[:company_name], @options[:bg_color], @options[:text_color], @options[:fg_color], @options[:company_name], icon, err, env['REQUEST_URI']]]]
     end
   end
   
