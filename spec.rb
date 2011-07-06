@@ -19,12 +19,19 @@ describe 'cerberus' do
     lambda { no_session_req.get('/') }.should.raise(Cerberus::NoSessionError).message.should=='Cerberus cannot work without Session'
   end
   
-  should 'Stop request if you are not already logged in or currently successfully logging' do
+  should 'Stop request if you are not already logged in' do
     res = req.get('/')
     res.status.should==401
     res.body.class==String
-    res = req.post('/', :params => {'cerberus_login' => 'fake', 'cerberus_pass' => 'fake'})
+    res.body.should.match(/name="cerberus_login" value="login"/)
+    res.body.should.match(/name="cerberus_pass" value="pass"/)
+  end
+  
+  should 'Stop request if you send wrong details and keep query values' do
+    res = req.post('/', :params => {'cerberus_login' => 'fake_login', 'cerberus_pass' => 'fake_pass'})
     res.status.should==401
+    res.body.should.match(/name="cerberus_login" value="fake_login"/)
+    res.body.should.match(/name="cerberus_pass" value="fake_pass"/)
   end
   
   should 'Give access with the appropriate login and pass' do

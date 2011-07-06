@@ -38,8 +38,8 @@ class Cerberus
     %s
     <p>Please Sign In</p>
     <form action="%s" method="post" accept-charset="utf-8">	
-    	<input type="text" name="cerberus_login" value="login" id='login'><br />
-    	<input type="password" name="cerberus_pass" value="pass" id='pass'>
+    	<input type="text" name="cerberus_login" value="%s" id='login'><br />
+    	<input type="password" name="cerberus_pass" value="%s" id='pass'>
     	<p><input type="submit" value="SIGN IN &rarr;"></p>
     </form>
     <script type="text/javascript" charset="utf-8">
@@ -95,7 +95,7 @@ PAGE
     else
       env['rack.session'].delete('cerberus_user')
       icon = @options[:icon_url].nil? ? '' : "<img src='#{@options[:icon_url]}' /><br />"
-      [401, {'Content-Type' => 'text/html'}, [AUTH_PAGE % [@options[:company_name], @options[:bg_color], @options[:text_color], @options[:fg_color], @options[:company_name], icon, err, env['REQUEST_URI']]]]
+      [401, {'Content-Type' => 'text/html'}, [AUTH_PAGE % [@options[:company_name], @options[:bg_color], @options[:text_color], @options[:fg_color], @options[:company_name], icon, err, env['REQUEST_URI'], req['cerberus_login']||'login', req['cerberus_pass']||'pass']]]
     end
   end
   
