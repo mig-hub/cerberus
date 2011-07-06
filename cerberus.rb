@@ -1,7 +1,6 @@
 class Cerberus
   
-  class NoSessionError < RuntimeError
-  end
+  class NoSessionError < RuntimeError; end
   
   AUTH_PAGE = <<-PAGE
   <html><head>
