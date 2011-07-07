@@ -1,5 +1,6 @@
 require ::File.dirname(__FILE__) + '/cerberus'
 use Rack::Session::Cookie, :secret => 'change_me'
+F = ::File
 
 map '/' do
   run lambda {|env|
@@ -13,15 +14,22 @@ map '/' do
       </body>
     </html>
     EOB
-    [200, {'Content-Type' => 'text/html'}, body]
+    [200, {'Content-Type' => 'text/html'}, [body]]
   }
 end
 
 map '/secret' do
-  use Cerberus, {:company_name => 'Nintendo'} do |login,pass|
+  use Cerberus, {:company_name => 'Nintendo', :fg_color => 'red', :css_location => '/css'} do |login,pass|
     [login,pass]==['mario','bros']
   end
   run lambda {|env|
-    [200, {'Content-Type' => 'text/plain'}, 'Welcome back Mario. Your Credit Card number is: 9292']
+    [200, {'Content-Type' => 'text/plain'}, ['Welcome back Mario. Your Credit Card number is: 9292']]
+  }
+end
+
+map '/css' do
+  run lambda {|env|
+    path = F.expand_path('./example.css')
+    [200, {'Content-Type' => 'text/css', "Last-Modified"  => F.mtime(path).httpdate, "Content-Length" => F.size?(path).to_s}, [F.read(path)]]
   }
 end

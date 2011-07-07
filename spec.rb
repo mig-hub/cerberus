@@ -11,6 +11,8 @@ describe 'cerberus' do
   secret_app = lambda {|env| [200, {'Content-Type'=>'text/plain'}, env['rack.session'].inspect] }
   app = Rack::Session::Cookie.new(Cerberus.new(secret_app, {}) {|login,pass| [login,pass]==['mario','bros']})
   req = Rack::MockRequest.new(app)
+  app_with_css = app = Rack::Session::Cookie.new(Cerberus.new(secret_app, {:css_location=>'/main.css'}) {|login,pass| [login,pass]==['mario','bros']})
+  req_with_css = Rack::MockRequest.new(app_with_css)
   cookie = ''
   
   should 'Raise if there is no session' do
@@ -65,6 +67,11 @@ describe 'cerberus' do
     res = req.get('/backend/logout', :params => {'cerberus_login' => 'mario', 'cerberus_pass' => 'bros'})
     res.status.should==302
     res['Location'].should=='/backend'
+  end
+  
+  should 'Use an external css file only if requested' do
+    req.get('/').body.should.not.match(/<link/)
+    req_with_css.get('/').body.should.match(/<link/)
   end
   
 end

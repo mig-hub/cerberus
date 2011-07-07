@@ -32,6 +32,7 @@ class Cerberus
       background-color: %s; }
     input { width: 400px; font-size: 20px; }
     </style>
+    %s
   </head><body>
   <div>
     <h1>%s</h1>
@@ -96,10 +97,11 @@ PAGE
     else
       env['rack.session'].delete('cerberus_user')
       icon = @options[:icon_url].nil? ? '' : "<img src='#{@options[:icon_url]}' /><br />"
+      css = @options[:css_location].nil? ? '' : "<link href='#{@options[:css_location]}' rel='stylesheet' type='text/css'>"
       [
         401, {'Content-Type' => 'text/html'}, 
         [AUTH_PAGE % [
-          @options[:company_name], @options[:bg_color], @options[:text_color], @options[:fg_color], @options[:company_name], 
+          @options[:company_name], @options[:bg_color], @options[:text_color], @options[:fg_color], css, @options[:company_name], 
           icon, err, env['REQUEST_URI'], req['cerberus_login']||'login', req['cerberus_pass']||'pass'
         ]]
       ]
