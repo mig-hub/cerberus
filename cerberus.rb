@@ -3,6 +3,7 @@ class Cerberus
   class NoSessionError < RuntimeError; end
   
   AUTH_PAGE = <<-PAGE
+  <!DOCTYPE html>
   <html><head>
     <title>%s Authentication</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
