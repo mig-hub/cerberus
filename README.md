@@ -50,6 +50,16 @@ If you want to see a concrete example, go into the Cerberus directory and run:
 	
 It's gonna start the example at http://localhost:9292
 
+You can also use the 3rd argument which is the request object:
+
+use Cerberus, {:company_name => 'Nintendo'} do |login, pass, req|
+  pass=='secret' && req.xhr?
+end
+
+This is more if you use it as a gateway for an API or something and you want to check other values.
+Like the referer or another parameter.
+But bear in mind that `cerberus_login` and `cerberus_pass` are still mandatory.
+
 Logout
 ------
 
@@ -74,6 +84,7 @@ Changelog
 	0.1.5 Fix CSS and Javascript for IE (Yes I'm too kind)
 	0.1.6 Send an Array instead of a string to Rack so that it works on Ruby 1.9
 	0.2.0 External CSS file + `:text_color` option + keep details after login failure
+	0.3.0 Now sends request as a 3rd argument to the block
 
 Copyright
 ---------

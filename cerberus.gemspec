@@ -1,6 +1,6 @@
 Gem::Specification.new do |s| 
   s.name = 'rack-cerberus'
-  s.version = "0.2.0"
+  s.version = "0.3.0"
   s.platform = Gem::Platform::RUBY
   s.summary = "A Rack middleware for form-based authentication"
   s.description = "A Rack middleware for form-based authentication. Aim is a compromise between fonctionality, beauty and customization."
