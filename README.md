@@ -85,6 +85,7 @@ Changelog
 	0.1.6 Send an Array instead of a string to Rack so that it works on Ruby 1.9
 	0.2.0 External CSS file + `:text_color` option + keep details after login failure
 	0.3.0 Now sends request as a 3rd argument to the block
+	0.3.1 Escape HTML in fields now that they are kept
 
 Copyright
 ---------
