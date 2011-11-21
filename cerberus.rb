@@ -29,8 +29,11 @@ class Cerberus
       -webkit-border-bottom-right-radius: 10px;
       -moz-border-radius-bottomright: 10px;
       border-bottom-right-radius: 10px;
+      -moz-box-shadow: 0px 0px 5px #333;
+      -webkit-box-shadow: 0px 0px 5px #333;
+      box-shadow: 0px 0px 5px #333;
       background-color: %s; }
-    input { width: 400px; font-size: 20px; }
+    input[type=text], input[type=password] { width: 392px; padding: 4px; border: 0px; font-size: 20px; }
     </style>
     %s
   </head><body>
