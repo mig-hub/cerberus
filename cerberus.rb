@@ -105,10 +105,17 @@ PAGE
         401, {'Content-Type' => 'text/html'}, 
         [AUTH_PAGE % [
           @options[:company_name], @options[:bg_color], @options[:text_color], @options[:fg_color], css, @options[:company_name], 
-          icon, err, env['REQUEST_URI'], req['cerberus_login']||'login', req['cerberus_pass']||'pass'
+          icon, err, env['REQUEST_URI'], html_escape(req['cerberus_login']||'login'), html_escape(req['cerberus_pass']||'pass')
         ]]
       ]
     end
+  end
+  
+  private
+  
+  # Stolen from ERB
+  def html_escape(s)
+    s.to_s.gsub(/&/, "&amp;").gsub(/\"/, "&quot;").gsub(/>/, "&gt;").gsub(/</, "&lt;")
   end
   
 end

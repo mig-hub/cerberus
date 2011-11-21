@@ -36,6 +36,13 @@ describe 'cerberus' do
     res.body.should.match(/name="cerberus_pass" value="fake_pass"/)
   end
   
+  should 'Escape HTML on submitted info' do
+    res = req.post('/', :params => {'cerberus_login' => '<script>bad</script>', 'cerberus_pass' => '<script>bad</script>'})
+    res.status.should==401
+    res.body.should.match(/name="cerberus_login" value="&lt;script&gt;bad&lt;\/script&gt;"/)
+    res.body.should.match(/name="cerberus_pass" value="&lt;script&gt;bad&lt;\/script&gt;"/)
+  end
+  
   should 'Give access with the appropriate login and pass' do
     res = req.get('/', :params => {'cerberus_login' => 'mario@nintendo.com', 'cerberus_pass' => 'bros'})
     cookie = res["Set-Cookie"]
