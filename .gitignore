@@ -1,2 +1,7 @@
-pkg
+.DS_STORE
+*.swp
+*.sass-cache
+pkg/
+Gemfile.lock
+.bundle/
 
