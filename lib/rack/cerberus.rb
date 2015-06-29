@@ -15,6 +15,8 @@ module Rack
         session_key: 'cerberus_user'
       }
       @options = defaults.merge(options)
+      @options[:icon] = @options[:icon_url].nil? ? '' : "<img src='#{@options[:icon_url]}' /><br />"
+      @options[:css] = @options[:css_location].nil? ? '' : "<link href='#{@options[:css_location]}' rel='stylesheet' type='text/css'>"
       @block = block
     end
     
@@ -39,18 +41,13 @@ module Rack
         end
       else
         env['rack.session'].delete(@options[:session_key])
-        icon = @options[:icon_url].nil? ? '' : "<img src='#{@options[:icon_url]}' /><br />"
-        css = @options[:css_location].nil? ? '' : "<link href='#{@options[:css_location]}' rel='stylesheet' type='text/css'>"
         [
           401, {'Content-Type' => 'text/html'}, 
-          [AUTH_PAGE % [
-            @options[:company_name], @options[:bg_color], 
-            @options[:text_color], @options[:fg_color], 
-            css, @options[:company_name], 
-            icon, err, env['REQUEST_URI'], 
-            html_escape(login||'login'), 
-            html_escape(pass||'pass')
-          ]]
+          [AUTH_PAGE % @options.merge({
+            error: err, submit_path: env['REQUEST_URI'],
+            login: html_escape(login||'login'), 
+            pass: html_escape(pass||'pass')
+          })]
         ]
       end
     end
@@ -65,11 +62,11 @@ module Rack
     AUTH_PAGE = <<-PAGE
     <!DOCTYPE html>
     <html><head>
-      <title>%s Authentication</title>
+      <title>%{company_name} Authentication</title>
       <meta http-equiv="content-type" content="text/html; charset=utf-8" />
       <style type='text/css'>
-      body { background-color: %s; font-family: sans-serif; text-align: center; margin: 0px; }
-      h1, p { color: %s; }
+      body { background-color: %{bg_color}; font-family: sans-serif; text-align: center; margin: 0px; }
+      h1, p { color: %{text_color}; }
       .err {
         padding: 5px;
         border-radius: 5px;
@@ -92,19 +89,19 @@ module Rack
         -moz-box-shadow: 0px 0px 5px #333;
         -webkit-box-shadow: 0px 0px 5px #333;
         box-shadow: 0px 0px 5px #333;
-        background-color: %s; }
+        background-color: %{fg_color}; }
       input[type=text], input[type=password] { width: 392px; padding: 4px; border: 0px; font-size: 20px; }
       </style>
-      %s
+      %{css}
     </head><body>
     <div>
-      <h1>%s</h1>
-      %s
-      %s
+      <h1>%{company_name}</h1>
+      %{icon}
+      %{error}
       <p>Please Sign In</p>
-      <form action="%s" method="post" accept-charset="utf-8">	
-        <input type="text" name="cerberus_login" value="%s" id='login'><br />
-        <input type="password" name="cerberus_pass" value="%s" id='pass'>
+      <form action="%{submit_path}" method="post" accept-charset="utf-8">	
+        <input type="text" name="cerberus_login" value="%{login}" id='login'><br />
+        <input type="password" name="cerberus_pass" value="%{pass}" id='pass'>
         <p><input type="submit" value="SIGN IN &rarr;"></p>
       </form>
       <script type="text/javascript" charset="utf-8">
