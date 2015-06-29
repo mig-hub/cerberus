@@ -1,4 +1,4 @@
-class Rack
+module Rack
 
   class Cerberus
     
@@ -106,8 +106,12 @@ class Rack
         [
           401, {'Content-Type' => 'text/html'}, 
           [AUTH_PAGE % [
-            @options[:company_name], @options[:bg_color], @options[:text_color], @options[:fg_color], css, @options[:company_name], 
-            icon, err, env['REQUEST_URI'], html_escape(req['cerberus_login']||'login'), html_escape(req['cerberus_pass']||'pass')
+            @options[:company_name], @options[:bg_color], 
+            @options[:text_color], @options[:fg_color], 
+            css, @options[:company_name], 
+            icon, err, env['REQUEST_URI'], 
+            html_escape(login||'login'), 
+            html_escape(pass||'pass')
           ]]
         ]
       end
@@ -123,3 +127,4 @@ class Rack
   end
 
 end
+
