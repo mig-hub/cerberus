@@ -4,6 +4,64 @@ module Rack
     
     class NoSessionError < RuntimeError; end
     
+    def initialize(app, options={}, &block)
+      @app = app
+      defaults = { 
+        company_name: 'Cerberus', 
+        bg_color: '#999', 
+        fg_color: '#CCC', 
+        text_color: '#FFF', 
+        icon_url: nil,
+        session_key: 'cerberus_user'
+      }
+      @options = defaults.merge(options)
+      @block = block
+    end
+    
+    def call(env)
+      dup._call(env)
+    end
+    
+    def _call(env)
+      raise(NoSessionError, 'Cerberus cannot work without Session') if env['rack.session'].nil?
+      req = Rack::Request.new(env)
+      login = req['cerberus_login']
+      pass = req['cerberus_pass']
+      err = req.post? ? "<p class='err'>Wrong login or password</p>" : ''
+      if ((env['rack.session'][@options[:session_key]]!=nil && env['PATH_INFO']!='/logout') || (login && pass && @block.call(login, pass, req)))
+        env['rack.session'][@options[:session_key]] ||= login
+        if env['PATH_INFO']=='/logout'
+          res = Rack::Response.new(env)
+          res.redirect(env['SCRIPT_NAME']=='' ? '/' : env['SCRIPT_NAME'])
+          res.finish
+        else
+          @app.call(env)
+        end
+      else
+        env['rack.session'].delete(@options[:session_key])
+        icon = @options[:icon_url].nil? ? '' : "<img src='#{@options[:icon_url]}' /><br />"
+        css = @options[:css_location].nil? ? '' : "<link href='#{@options[:css_location]}' rel='stylesheet' type='text/css'>"
+        [
+          401, {'Content-Type' => 'text/html'}, 
+          [AUTH_PAGE % [
+            @options[:company_name], @options[:bg_color], 
+            @options[:text_color], @options[:fg_color], 
+            css, @options[:company_name], 
+            icon, err, env['REQUEST_URI'], 
+            html_escape(login||'login'), 
+            html_escape(pass||'pass')
+          ]]
+        ]
+      end
+    end
+    
+    private
+    
+    # Stolen from ERB
+    def html_escape(s)
+      s.to_s.gsub(/&/, "&amp;").gsub(/\"/, "&quot;").gsub(/>/, "&gt;").gsub(/</, "&lt;")
+    end
+    
     AUTH_PAGE = <<-PAGE
     <!DOCTYPE html>
     <html><head>
@@ -65,64 +123,7 @@ module Rack
       </script>
     </div>
     </body></html>
-  PAGE
-    
-    def initialize(app, options={}, &block)
-      @app = app
-      defaults = { 
-        :company_name => 'Cerberus', 
-        :bg_color => '#999', 
-        :fg_color => '#CCC', 
-        :text_color => '#FFF', 
-        :icon_url => nil
-      }
-      @options = defaults.merge(options)
-      @block = block
-    end
-    
-    def call(env)
-      dup._call(env)
-    end
-    
-    def _call(env)
-      raise(NoSessionError, 'Cerberus cannot work without Session') if env['rack.session'].nil?
-      req = Rack::Request.new(env)
-      login = req['cerberus_login']
-      pass = req['cerberus_pass']
-      err = req.post? ? "<p class='err'>Wrong login or password</p>" : ''
-      if ((env['rack.session']['cerberus_user']!=nil && env['PATH_INFO']!='/logout') || (login && pass && @block.call(login, pass, req)))
-        env['rack.session']['cerberus_user'] ||= login
-        if env['PATH_INFO']=='/logout'
-          res = Rack::Response.new(env)
-          res.redirect(env['SCRIPT_NAME']=='' ? '/' : env['SCRIPT_NAME'])
-          res.finish
-        else
-          @app.call(env)
-        end
-      else
-        env['rack.session'].delete('cerberus_user')
-        icon = @options[:icon_url].nil? ? '' : "<img src='#{@options[:icon_url]}' /><br />"
-        css = @options[:css_location].nil? ? '' : "<link href='#{@options[:css_location]}' rel='stylesheet' type='text/css'>"
-        [
-          401, {'Content-Type' => 'text/html'}, 
-          [AUTH_PAGE % [
-            @options[:company_name], @options[:bg_color], 
-            @options[:text_color], @options[:fg_color], 
-            css, @options[:company_name], 
-            icon, err, env['REQUEST_URI'], 
-            html_escape(login||'login'), 
-            html_escape(pass||'pass')
-          ]]
-        ]
-      end
-    end
-    
-    private
-    
-    # Stolen from ERB
-    def html_escape(s)
-      s.to_s.gsub(/&/, "&amp;").gsub(/\"/, "&quot;").gsub(/>/, "&gt;").gsub(/</, "&lt;")
-    end
+    PAGE
     
   end
 

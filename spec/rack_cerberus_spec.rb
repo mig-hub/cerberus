@@ -119,6 +119,16 @@ RSpec.describe Rack::Cerberus do
       end
     end
 
+    context 'Session key is different' do
+      let(:cerberus_options) { {session_key: 'different_user'} }
+      it 'Uses the session key of the options' do
+        get('/', {'cerberus_login' => 'mario@nintendo.com', 'cerberus_pass' => 'bros'})
+        get('/')
+        expect(last_response.status).to eq 200
+        expect(last_response.body).to include('"different_user"=>"mario@nintendo.com"}')
+      end
+    end
+
   end
   
 end

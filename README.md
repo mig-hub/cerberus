@@ -29,6 +29,7 @@ There is an optional hash you can add for customisation it. Options are:
 - `:text_color`
 - `:icon_url` (for a company logo or any icon)
 - `:css_location`
+- `:session_key` (Where login is kept. Default is `cerberus_user`)
 
 Which is used that way:
 
