@@ -1,4 +1,4 @@
-require ::File.dirname(__FILE__) + '/cerberus'
+require ::File.dirname(__FILE__) + '/lib/rack/cerberus'
 use Rack::Session::Cookie, :secret => 'change_me'
 F = ::File
 
@@ -7,7 +7,7 @@ map '/' do
     body = <<-EOB.strip
     <html>
       <head>
-        <title>Cerberus</title>
+        <title>Rack::Cerberus</title>
       </head>
       <body>This page is public, so you can see it. But what happens if you want to see a <a href='/secret'>Secret Page</a>? Nevertheless, I can give you access:<br /><br />
         Login: <b>mario</b><br />Pass: <b>bros</b>
@@ -19,7 +19,7 @@ map '/' do
 end
 
 map '/secret' do
-  use Cerberus, {:company_name => 'Nintendo', :fg_color => 'red', :css_location => '/css'} do |login,pass|
+  use Rack::Cerberus, {:company_name => 'Nintendo', :fg_color => 'red', :css_location => '/css'} do |login,pass|
     [login,pass]==['mario','bros']
   end
   run lambda {|env|
@@ -29,7 +29,7 @@ end
 
 map '/css' do
   run lambda {|env|
-    path = F.expand_path('./example.css')
+    path = F.expand_path('./main.css')
     [200, {'Content-Type' => 'text/css', "Last-Modified"  => F.mtime(path).httpdate, "Content-Length" => F.size?(path).to_s}, [F.read(path)]]
   }
 end

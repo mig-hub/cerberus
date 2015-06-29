@@ -45,17 +45,21 @@ to have more control using an external CSS file with the option `:css_location`.
 Just like `Rack::Auth::Basic`, Rack::Cerberus yields login and pass, and delegate authentication
 to the block you send it which should return a boolean.
 
-If you want to see a concrete example, go into the Rack::Cerberus directory and run:
+If you want to see a concrete example, go into the `example/` directory and run:
 
-    # rackup example.ru
+```
+# rackup
+```
 	
 It's gonna start the example at http://localhost:9292
 
 You can also use the 3rd argument which is the request object:
 
+```
 use Rack::Cerberus, {:company_name => 'Nintendo'} do |login, pass, req|
   pass=='secret' && req.xhr?
 end
+```
 
 This is more if you use it as a gateway for an API or something and you want to check other values.
 Like the referer or another parameter.
