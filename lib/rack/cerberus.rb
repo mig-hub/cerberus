@@ -1,4 +1,5 @@
 require 'rack/utils'
+require 'rack/cerberus/version'
 
 module Rack
 

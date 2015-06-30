@@ -1,4 +1,4 @@
-require_relative './lib/rack/cerberus'
+require_relative './lib/rack/cerberus/version'
 
 Gem::Specification.new do |s| 
 
