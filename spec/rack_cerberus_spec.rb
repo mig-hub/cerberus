@@ -40,8 +40,8 @@ RSpec.describe Rack::Cerberus do
       expect(last_response.status).to eq 401
       body = last_response.body
       expect(body.class).to eq String
-      expect(body).to match(/name="cerberus_login" value=""/)
-      expect(body).to match(/name="cerberus_pass" value=""/)
+      expect(body).to include('name="cerberus_login" value=""')
+      expect(body).to include('name="cerberus_pass" value=""')
     end
   end
   
@@ -51,12 +51,12 @@ RSpec.describe Rack::Cerberus do
       it 'Stops requests' do
         post('/', {'cerberus_login' => 'fake_login', 'cerberus_pass' => 'fake_pass'})
         expect(last_response.status).to eq 401
-        expect(last_response.body).to match(/Wrong login or password/)
+        expect(last_response.body).to include('Wrong login or password')
       end
       it 'Keeps what was entered in the fields' do
         post('/', {'cerberus_login' => 'fake_login', 'cerberus_pass' => 'fake_pass'})
-        expect(last_response.body).to match(/name="cerberus_login" value="fake_login"/)
-        expect(last_response.body).to match(/name="cerberus_pass" value="fake_pass"/)
+        expect(last_response.body).to include('name="cerberus_login" value="fake_login"')
+        expect(last_response.body).to include('name="cerberus_pass" value="fake_pass"')
       end
       it 'Escapes HTML on submitted info' do
         expect(Rack::Utils).to receive(:escape_html).with('<script>bad</script>').twice
@@ -146,3 +146,4 @@ RSpec.describe Rack::Cerberus do
   end
   
 end
+
