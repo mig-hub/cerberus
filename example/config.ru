@@ -1,6 +1,6 @@
-require ::File.dirname(__FILE__) + '/lib/rack/cerberus'
-use Rack::Session::Cookie, :secret => 'change_me'
-F = ::File
+require_relative '../lib/rack/cerberus'
+
+use Rack::Session::Cookie, secret: 'change_me'
 
 map '/' do
   run lambda {|env|
@@ -19,17 +19,17 @@ map '/' do
 end
 
 map '/secret' do
-  use Rack::Cerberus, {:company_name => 'Nintendo', :fg_color => 'red', :css_location => '/css'} do |login,pass|
+  use Rack::Cerberus, {
+    company_name: 'Nintendo', 
+    fg_color: 'red', 
+  } do |login,pass|
     [login,pass]==['mario','bros']
   end
   run lambda {|env|
-    [200, {'Content-Type' => 'text/plain'}, ['Welcome back Mario. Your Credit Card number is: 9292']]
+    [
+      200, {'Content-Type' => 'text/plain'}, 
+      ['Welcome back Mario. Your Credit Card number is: 9292']
+    ]
   }
 end
 
-map '/css' do
-  run lambda {|env|
-    path = F.expand_path('./main.css')
-    [200, {'Content-Type' => 'text/css', "Last-Modified"  => F.mtime(path).httpdate, "Content-Length" => F.size?(path).to_s}, [F.read(path)]]
-  }
-end
