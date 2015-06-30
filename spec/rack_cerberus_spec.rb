@@ -65,9 +65,24 @@ RSpec.describe Rack::Cerberus do
     end
 
     context 'Login details are correct' do
+      let(:secret_app) {
+        lambda {|env| 
+          [200, {'Content-Type'=>'text/plain'}, env['REQUEST_METHOD']] 
+        }
+      }
       it 'Gives access' do
         get('/', {'cerberus_login' => 'mario@nintendo.com', 'cerberus_pass' => 'bros'})
         expect(last_response.status).to eq 200
+      end
+      it 'Calls the final page with the original method' do
+        get('/')
+        expect(last_response.body).to include('name="_method" value="GET"')
+        post('/', {
+          'cerberus_login' => 'mario@nintendo.com', 
+          'cerberus_pass' => 'bros',
+          '_method' => 'GET'
+        })
+        expect(last_response.body).to eq 'GET'
       end
     end
 

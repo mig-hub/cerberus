@@ -4,9 +4,11 @@ module Rack
 
   class Cerberus
     
-    VERSION = '1.0.0'
+    VERSION = '1.0.1'
 
     class NoSessionError < RuntimeError; end
+
+    def self.new(*); ::Rack::MethodOverride.new(super); end
     
     def initialize(app, options={}, &block)
       @app = app
@@ -49,6 +51,7 @@ module Rack
           401, {'Content-Type' => 'text/html'}, 
           [AUTH_PAGE % @options.merge({
             error: err, submit_path: env['REQUEST_URI'],
+            request_method: req.request_method,
             login: Rack::Utils.escape_html(login), 
             pass: Rack::Utils.escape_html(pass)
           })]
@@ -107,6 +110,7 @@ module Rack
       <form action="%{submit_path}" method="post" accept-charset="utf-8">	
         <input type="text" name="cerberus_login" value="%{login}" id='login' title='Login' placeholder='Login'><br />
         <input type="password" name="cerberus_pass" value="%{pass}" id='pass' title='Password' placeholder='Password'>
+        <input type="hidden" name="_method" value="%{request_method}">
         <p><input type="submit" value="SIGN IN &rarr;"></p>
       </form>
       <script type="text/javascript" charset="utf-8">
