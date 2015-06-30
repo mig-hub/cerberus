@@ -4,6 +4,8 @@ module Rack
 
   class Cerberus
     
+    VERSION = '1.0.0'
+
     class NoSessionError < RuntimeError; end
     
     def initialize(app, options={}, &block)

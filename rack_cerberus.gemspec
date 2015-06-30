@@ -1,9 +1,11 @@
+require_relative './lib/rack/cerberus'
+
 Gem::Specification.new do |s| 
 
   s.name = 'rack-cerberus'
-  s.version = "0.3.1"
+  s.version = Rack::Cerberus::VERSION
   s.summary = "A Rack middleware for form-based authentication"
-  s.description = "A Rack middleware for form-based authentication. Aim is a compromise between fonctionality, beauty and customization."
+  s.description = "A Rack middleware for form-based authentication. It works roughly like Basic HTTP Authentication except that the authentication page can be styled with the middleware options."
 
   s.files = `git ls-files`.split("\n").sort
   s.require_path = './lib'
@@ -14,4 +16,6 @@ Gem::Specification.new do |s|
   s.author = "Mickael Riga"
   s.email = "mig@mypeplum.com"
   s.homepage = "http://github.com/mig-hub/cerberus"
+
 end
+
