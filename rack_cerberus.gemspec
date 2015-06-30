@@ -6,6 +6,7 @@ Gem::Specification.new do |s|
   s.version = Rack::Cerberus::VERSION
   s.summary = "A Rack middleware for form-based authentication"
   s.description = "A Rack middleware for form-based authentication. It works roughly like Basic HTTP Authentication except that the authentication page can be styled with the middleware options."
+  s.licenses = ['MIT']
 
   s.files = `git ls-files`.split("\n").sort
   s.require_path = './lib'
