@@ -4,7 +4,7 @@ module Rack
 
   class Cerberus
     
-    VERSION = '1.0.1'
+    VERSION = '1.0.2'
 
     class NoSessionError < RuntimeError; end
 
@@ -35,7 +35,6 @@ module Rack
       req = Rack::Request.new(env)
       login = req['cerberus_login']
       pass = req['cerberus_pass']
-      err = req.post? ? "<p class='err'>Wrong login or password</p>" : ''
       if ((env['rack.session'][@options[:session_key]]!=nil && env['PATH_INFO']!='/logout') || (login && pass && @block.call(login, pass, req)))
         env['rack.session'][@options[:session_key]] ||= login
         if env['PATH_INFO']=='/logout'
@@ -46,11 +45,14 @@ module Rack
           @app.call(env)
         end
       else
+        if !login.nil? or !pass.nil?
+          error = "<p class='err'>Wrong login or password</p>"
+        end
         env['rack.session'].delete(@options[:session_key])
         [
           401, {'Content-Type' => 'text/html'}, 
           [AUTH_PAGE % @options.merge({
-            error: err, submit_path: env['REQUEST_URI'],
+            error: error, submit_path: env['REQUEST_URI'],
             request_method: req.request_method,
             login: Rack::Utils.escape_html(login), 
             pass: Rack::Utils.escape_html(pass)

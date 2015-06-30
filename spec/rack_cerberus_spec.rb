@@ -49,7 +49,7 @@ RSpec.describe Rack::Cerberus do
 
     context 'Login details are incorrect' do
       it 'Stops requests' do
-        post('/', {'cerberus_login' => 'fake_login', 'cerberus_pass' => 'fake_pass'})
+        get('/', {'cerberus_login' => 'fake_login', 'cerberus_pass' => 'fake_pass'})
         expect(last_response.status).to eq 401
         expect(last_response.body).to include('Wrong login or password')
       end
