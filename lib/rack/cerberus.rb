@@ -1,3 +1,5 @@
+require 'rack/utils'
+
 module Rack
 
   class Cerberus
@@ -45,18 +47,11 @@ module Rack
           401, {'Content-Type' => 'text/html'}, 
           [AUTH_PAGE % @options.merge({
             error: err, submit_path: env['REQUEST_URI'],
-            login: html_escape(login), 
-            pass: html_escape(pass)
+            login: Rack::Utils.escape_html(login), 
+            pass: Rack::Utils.escape_html(pass)
           })]
         ]
       end
-    end
-    
-    private
-    
-    # Stolen from ERB
-    def html_escape(s)
-      s.to_s.gsub(/&/, "&amp;").gsub(/\"/, "&quot;").gsub(/>/, "&gt;").gsub(/</, "&lt;")
     end
     
     AUTH_PAGE = <<-PAGE

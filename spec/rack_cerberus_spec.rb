@@ -59,9 +59,8 @@ RSpec.describe Rack::Cerberus do
         expect(last_response.body).to match(/name="cerberus_pass" value="fake_pass"/)
       end
       it 'Escapes HTML on submitted info' do
+        expect(Rack::Utils).to receive(:escape_html).with('<script>bad</script>').twice
         post('/', {'cerberus_login' => '<script>bad</script>', 'cerberus_pass' => '<script>bad</script>'})
-        expect(last_response.body).to match(/name="cerberus_login" value="&lt;script&gt;bad&lt;\/script&gt;"/)
-        expect(last_response.body).to match(/name="cerberus_pass" value="&lt;script&gt;bad&lt;\/script&gt;"/)
       end
     end
 

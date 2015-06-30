@@ -21,7 +21,7 @@ end
 map '/secret' do
   use Rack::Cerberus, {
     company_name: 'Nintendo', 
-    # fg_color: 'red', 
+    fg_color: 'red', 
   } do |login,pass|
     [login,pass]==['mario','bros']
   end
