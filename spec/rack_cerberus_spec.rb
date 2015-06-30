@@ -40,8 +40,8 @@ RSpec.describe Rack::Cerberus do
       expect(last_response.status).to eq 401
       body = last_response.body
       expect(body.class).to eq String
-      expect(body).to match(/name="cerberus_login" value="login"/)
-      expect(body).to match(/name="cerberus_pass" value="pass"/)
+      expect(body).to match(/name="cerberus_login" value=""/)
+      expect(body).to match(/name="cerberus_pass" value=""/)
     end
   end
   

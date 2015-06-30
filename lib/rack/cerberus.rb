@@ -45,8 +45,8 @@ module Rack
           401, {'Content-Type' => 'text/html'}, 
           [AUTH_PAGE % @options.merge({
             error: err, submit_path: env['REQUEST_URI'],
-            login: html_escape(login||'login'), 
-            pass: html_escape(pass||'pass')
+            login: html_escape(login), 
+            pass: html_escape(pass)
           })]
         ]
       end
@@ -65,32 +65,40 @@ module Rack
       <title>%{company_name} Authentication</title>
       <meta http-equiv="content-type" content="text/html; charset=utf-8" />
       <style type='text/css'>
+      * {
+        -moz-box-sizing: border-box;
+        -ms-box-sizing: border-box;
+        box-sizing: border-box;
+      }
       body { background-color: %{bg_color}; font-family: sans-serif; text-align: center; margin: 0px; }
       h1, p { color: %{text_color}; }
       .err {
-        padding: 5px;
-        border-radius: 5px;
-        -moz-border-radius: 5px;
-        -webkit-border-radius: 5px;
+        padding: 1em;
+        border-radius: 3px;
+        -moz-border-radius: 3px;
+        -webkit-border-radius: 3px;
         color: white;
         background-color: red;
       }
       div { 
         text-align: left;
-        width: 400px;
+        width: 500px;
         margin: 0px auto;
-        padding: 10px;
-        -webkit-border-bottom-left-radius: 10px;
-        -moz-border-radius-bottomleft: 10px;
-        border-bottom-left-radius: 10px;
-        -webkit-border-bottom-right-radius: 10px;
-        -moz-border-radius-bottomright: 10px;
-        border-bottom-right-radius: 10px;
+        padding: 2em;
+        -webkit-border-bottom-left-radius: 3px;
+        -moz-border-radius-bottomleft: 3px;
+        border-bottom-left-radius: 3px;
+        -webkit-border-bottom-right-radius: 3px;
+        -moz-border-radius-bottomright: 3px;
+        border-bottom-right-radius: 3px;
         -moz-box-shadow: 0px 0px 5px #333;
-        -webkit-box-shadow: 0px 0px 5px #333;
-        box-shadow: 0px 0px 5px #333;
+        -webkit-box-shadow: 0px 0px 5px #555;
+        box-shadow: 0px 0px 5px #555;
         background-color: %{fg_color}; }
-      input[type=text], input[type=password] { width: 392px; padding: 4px; border: 0px; font-size: 20px; }
+      input[type=text], input[type=password] { 
+        display: block; width: 100%%; padding: 0.5em; 
+        border: 0px; font-size: 1.25em; 
+      }
       </style>
       %{css}
     </head><body>
@@ -100,8 +108,8 @@ module Rack
       %{error}
       <p>Please Sign In</p>
       <form action="%{submit_path}" method="post" accept-charset="utf-8">	
-        <input type="text" name="cerberus_login" value="%{login}" id='login'><br />
-        <input type="password" name="cerberus_pass" value="%{pass}" id='pass'>
+        <input type="text" name="cerberus_login" value="%{login}" id='login' title='Login' placeholder='Login'><br />
+        <input type="password" name="cerberus_pass" value="%{pass}" id='pass' title='Password' placeholder='Password'>
         <p><input type="submit" value="SIGN IN &rarr;"></p>
       </form>
       <script type="text/javascript" charset="utf-8">
