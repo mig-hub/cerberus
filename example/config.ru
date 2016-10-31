@@ -1,4 +1,6 @@
-require_relative '../lib/rack/cerberus'
+lib = File.expand_path('../../lib', __FILE__)
+$:.unshift lib
+require 'rack/cerberus'
 
 use Rack::Session::Cookie, secret: 'change_me'
 

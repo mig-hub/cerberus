@@ -1,4 +1,8 @@
-require_relative './lib/rack/cerberus/version'
+# encoding: utf-8
+
+lib = File.expand_path('../lib', __FILE__)
+$:.unshift lib
+require 'rack/cerberus/version'
 
 Gem::Specification.new do |s| 
 
