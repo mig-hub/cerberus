@@ -5,8 +5,6 @@ module Rack
 
   class Cerberus
     
-    VERSION = '1.0.2'
-
     class NoSessionError < RuntimeError; end
 
     def self.new(*); ::Rack::MethodOverride.new(super); end
