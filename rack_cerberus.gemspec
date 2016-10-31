@@ -18,10 +18,14 @@ Gem::Specification.new do |s|
 
   s.platform = Gem::Platform::RUBY
   s.files = `git ls-files`.split("\n").sort
-  s.test_files = s.files.select { |p| p =~ /^spec\/.*_spec.rb/ }
+  s.test_files = s.files.select { |p| p =~ /^test\/test_.*\.rb$/ }
   s.require_paths = ['lib']
 
   s.add_dependency 'rack', '~> 2.0'
+
+  s.add_development_dependency 'bundler', '~> 1.13'
+  s.add_development_dependency 'minitest', '~> 5.8'
+  s.add_development_dependency 'rack-test'
 
 end
 
