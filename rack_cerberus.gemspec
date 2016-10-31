@@ -21,11 +21,11 @@ Gem::Specification.new do |s|
   s.test_files = s.files.select { |p| p =~ /^test\/test_.*\.rb$/ }
   s.require_paths = ['lib']
 
-  s.add_dependency 'rack', '~> 2.0'
+  s.add_dependency 'rack', '>= 1.0'
 
   s.add_development_dependency 'bundler', '~> 1.13'
   s.add_development_dependency 'minitest', '~> 5.8'
-  s.add_development_dependency 'rack-test'
+  s.add_development_dependency 'rack-test', '~> 0.6'
 
 end
 
