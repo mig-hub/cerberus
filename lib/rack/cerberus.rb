@@ -9,57 +9,111 @@ module Rack
 
     def self.new(*); ::Rack::MethodOverride.new(super); end
     
-    def initialize(app, options={}, &block)
+    def initialize app, options={}, &block
       @app = app
       defaults = { 
         company_name: 'Cerberus', 
         bg_color: '#999', 
         fg_color: '#CCC', 
         text_color: '#FFF', 
-        icon_url: nil,
         session_key: 'cerberus_user'
       }
       @options = defaults.merge(options)
-      @options[:icon] = @options[:icon_url].nil? ? '' : "<img src='#{@options[:icon_url]}' /><br />"
-      @options[:css] = @options[:css_location].nil? ? '' : "<link href='#{@options[:css_location]}' rel='stylesheet' type='text/css'>"
+      @options[:icon] = @options[:icon_url].nil? ? 
+        '' : 
+        "<img src='#{@options[:icon_url]}' /><br />"
+      @options[:css] = @options[:css_location].nil? ? 
+        '' : 
+        "<link href='#{@options[:css_location]}' rel='stylesheet' type='text/css'>"
       @block = block
     end
     
-    def call(env)
+    def call env
       dup._call(env)
     end
     
-    def _call(env)
-      raise(NoSessionError, 'Cerberus cannot work without Session') if env['rack.session'].nil?
-      req = Rack::Request.new(env)
-      login = req['cerberus_login']
-      pass = req['cerberus_pass']
-      if ((env['rack.session'][@options[:session_key]]!=nil && env['PATH_INFO']!='/logout') || (login && pass && @block.call(login, pass, req)))
-        env['rack.session'][@options[:session_key]] ||= login
-        if env['PATH_INFO']=='/logout'
-          res = Rack::Response.new(env)
-          res.redirect(env['SCRIPT_NAME']=='' ? '/' : env['SCRIPT_NAME'])
-          res.finish
+    def _call env
+      ensure_session env
+      req = Rack::Request.new env
+      if (logged?(req) and !logging_out?(req)) or authorized?(req)
+        ensure_logged! req
+        if logging_out? req
+          logout_response req
         else
-          @app.call(env)
+          @app.call env
         end
       else
-        if !login.nil? or !pass.nil?
-          error = "<p class='err'>Wrong login or password</p>"
-        end
-        env['rack.session'].delete(@options[:session_key])
-        [
-          401, {'Content-Type' => 'text/html'}, 
-          [AUTH_PAGE % @options.merge({
-            error: error, submit_path: env['REQUEST_URI'],
-            request_method: req.request_method,
-            login: Rack::Utils.escape_html(login), 
-            pass: Rack::Utils.escape_html(pass)
-          })]
-        ]
+        form_response req
       end
     end
-    
+
+    private
+
+    def ensure_session env
+      if env['rack.session'].nil?
+        raise(NoSessionError, 'Cerberus cannot work without Session') 
+      end
+    end
+
+    def h text
+      Rack::Utils.escape_html text
+    end
+
+    def login req
+      req.params['cerberus_login']
+    end
+
+    def pass req
+      req.params['cerberus_pass']
+    end
+
+    def logged? req
+      req.env['rack.session'][@options[:session_key]]!=nil
+    end
+
+    def provided_fields? req
+      login(req) and pass(req)
+    end
+
+    def authorized? req
+      provided_fields?(req) and 
+      @block.call login(req), pass(req), req
+    end
+
+    def ensure_logged! req
+      req.env['rack.session'][@options[:session_key]] ||= login(req)
+    end
+
+    def ensure_logged_out! req
+      req.env['rack.session'].delete @options[:session_key]
+    end
+
+    def logging_out? req
+      req.path_info=='/logout'
+    end
+
+    def logout_response req
+      res = Rack::Response.new
+      res.redirect(req.script_name=='' ? '/' : req.script_name)
+      res.finish
+    end
+
+    def form_response req
+      if provided_fields? req
+        error = "<p class='err'>Wrong login or password</p>"
+      end
+      ensure_logged_out! req
+      [
+        401, {'Content-Type' => 'text/html'}, 
+        [AUTH_PAGE % @options.merge({
+          error: error, submit_path: req.env['REQUEST_URI'],
+          request_method: req.request_method,
+          login: h(login(req)), 
+          pass: h(pass(req))
+        })]
+      ]
+    end
+
     AUTH_PAGE = <<-PAGE
     <!DOCTYPE html>
     <html><head>
