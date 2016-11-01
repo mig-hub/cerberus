@@ -13,9 +13,9 @@ module Rack
       @app = app
       defaults = { 
         company_name: 'Cerberus', 
-        bg_color: '#999', 
-        fg_color: '#CCC', 
-        text_color: '#FFF', 
+        bg_color: '#93a1a1', 
+        fg_color: '#002b36', 
+        text_color: '#fdf6e3', 
         session_key: 'cerberus_user'
       }
       @options = defaults.merge(options)
@@ -133,7 +133,7 @@ module Rack
         -moz-border-radius: 3px;
         -webkit-border-radius: 3px;
         color: white;
-        background-color: red;
+        background-color: #dc322f;
       }
       div { 
         text-align: left;
@@ -153,7 +153,23 @@ module Rack
       input[type=text], input[type=password] { 
         display: block; width: 100%%; padding: 0.5em; 
         border: 0px; font-size: 1.25em; 
+        background-color: %{text_color};
       }
+      input[type=submit] {
+        background-color: %{bg_color};
+        color: %{fg_color};
+        padding: 0.5em;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border: 0;
+        cursor: pointer;
+      }
+      input[type=submit]:hover { background-color: %{text_color}; }
+      ::-webkit-input-placeholder { color: %{bg_color}; }
+      :-moz-placeholder { color: %{bg_color}; }
+      ::-moz-placeholder { color: %{bg_color}; }
+      :-ms-input-placeholder { color: %{bg_color}; }
       </style>
       %{css}
     </head><body>
@@ -168,20 +184,6 @@ module Rack
         <input type="hidden" name="_method" value="%{request_method}">
         <p><input type="submit" value="SIGN IN &rarr;"></p>
       </form>
-      <script type="text/javascript" charset="utf-8">
-        var login = document.getElementById('login');
-        var pass = document.getElementById('pass');
-        var focus = function() {
-          if (this.value==this.id) this.value = '';
-        }
-        var blur = function() {
-          if (this.value=='') this.value = this.id;
-        }	
-        login.onfocus = focus;
-        pass.onfocus = focus;
-        login.onblur = blur;
-        pass.onblur = blur;
-      </script>
     </div>
     </body></html>
     PAGE

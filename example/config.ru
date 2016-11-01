@@ -21,10 +21,7 @@ map '/' do
 end
 
 map '/secret' do
-  use Rack::Cerberus, {
-    company_name: 'Nintendo', 
-    fg_color: 'red', 
-  } do |login,pass|
+  use Rack::Cerberus, { company_name: 'Nintendo' } do |login,pass|
     [login,pass]==['mario','bros']
   end
   run lambda {|env|
