@@ -8,18 +8,18 @@ options in order to style the authentication page.
 Install with:
 
 ```
-# sudo gem install rack-cerberus
+# gem install rack-cerberus
 ```
 
 Or in your `Gemfile`:
 
-```
+```ruby
 gem 'rack-cerberus'
 ```
 
 You can use it almost the same way you use `Rack::Auth::Basic`:
 
-```
+```ruby
 require 'rack/cerberus'
 use Rack::Session::Cookie, secret: 'change_me'
 use Rack::Cerberus do |login, pass|
@@ -45,7 +45,7 @@ There is an optional hash you can add for customisation it. Options are:
 
 Which is used that way:
 
-```
+```ruby
 use Rack::Cerberus, {company_name: 'Nintendo'} do |login, pass|
   pass=='secret'
 end
@@ -66,15 +66,14 @@ return `true` or `false`.
 
 You can also use the 3rd argument which is the request object:
 
-```
+```ruby
 use Rack::Cerberus, {company_name: 'Nintendo'} do |login, pass, req|
   pass=='secret' && req.xhr?
 end
 ```
 
 This is useful if you want to check other details of the request.
-Like the referer or another parameter. But bear in mind that `cerberus_login` 
-and `cerberus_pass` are still mandatory.
+Like the referer or another parameter. But bear in mind that `cerberus_login` and `cerberus_pass` are still mandatory.
 
 Example
 -------
@@ -103,5 +102,5 @@ or send patches.
 Copyright
 ---------
 
-(c) 2010-2015 Mickael Riga - see MIT_LICENSE for details 
+(c) 2010-2016 Mickael Riga - see `MIT_LICENSE` for details 
 
