@@ -102,5 +102,5 @@ or send patches.
 Copyright
 ---------
 
-(c) 2010-2016 Mickael Riga - see `MIT_LICENSE` for details 
+(c) 2010-2017 Mickael Riga - see `MIT_LICENSE` for details 
 
