@@ -106,7 +106,7 @@ module Rack
       [
         401, {'Content-Type' => 'text/html'}, 
         [AUTH_PAGE % @options.merge({
-          error: error, submit_path: req.env['REQUEST_URI'],
+          error: error, submit_path: h(req.env['REQUEST_URI']),
           request_method: req.request_method,
           login: h(login(req)), 
           pass: h(pass(req))
