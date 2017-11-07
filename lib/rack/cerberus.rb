@@ -16,7 +16,8 @@ module Rack
         bg_color: '#93a1a1', 
         fg_color: '#002b36', 
         text_color: '#fdf6e3', 
-        session_key: 'cerberus_user'
+        session_key: 'cerberus_user',
+        forgot_password_uri: nil
       }
       @options = defaults.merge(options)
       @options[:icon] = @options[:icon_url].nil? ? 
@@ -101,12 +102,19 @@ module Rack
     def form_response req
       if provided_fields? req
         error = "<p class='err'>Wrong login or password</p>"
+        unless @options[:forgot_password_uri].nil?
+          forgot_password = FORGOT_PASSWORD % {
+            action: @options[:forgot_password_uri],
+            login: h(login(req))
+          }
+        end
       end
       ensure_logged_out! req
       [
         401, {'Content-Type' => 'text/html'}, 
         [AUTH_PAGE % @options.merge({
           error: error, submit_path: h(req.env['REQUEST_URI']),
+          forgot_password: forgot_password,
           request_method: req.request_method,
           login: h(login(req)), 
           pass: h(pass(req))
@@ -184,10 +192,18 @@ module Rack
         <input type="hidden" name="_method" value="%{request_method}">
         <p><input type="submit" value="SIGN IN &rarr;"></p>
       </form>
+      %{forgot_password}
     </div>
     </body></html>
     PAGE
     
+    FORGOT_PASSWORD = <<-FORM
+    <form action="%{action}" method="post" accept-charset="utf-8">	
+      <input type="hidden" name="cerberus_login" value="%{login}" />
+      <p><input type="submit" value="Forgot your password? &rarr;"></p>
+    </form>
+    FORM
+
   end
 
 end

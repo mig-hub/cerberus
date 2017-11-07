@@ -151,5 +151,37 @@ class TestRackCerberus < Minitest::Test
     assert_match '"different_user"=>"mario@nintendo.com"', body
   end
 
+  def test_forgot_password_uri_when_logins_provided
+    @app = mounted_app '/', forgot_password_uri: '/forgot-password'
+    post '/', wrong_logins
+    assert_equal 401, last_response.status
+    assert_match /form action="\/forgot-password" method="post"/, body
+    assert_match /type="hidden" name="cerberus_login" value="fake_login"/, body
+  end
+
+  def test_forgot_password_uri_when_logins_not_provided
+    @app = mounted_app '/', forgot_password_uri: '/forgot-password'
+    post '/'
+    assert_equal 401, last_response.status
+    refute_match /form action="\/forgot-password" method="post"/, body
+    refute_match /type="hidden" name="cerberus_login" value="fake_login"/, body
+  end
+
+  def test_no_forgot_password_form_when_no_uri
+    post '/', wrong_logins
+    assert_equal 401, last_response.status
+    refute_match /form action="\/forgot-password" method="post"/, body
+  end
+
+  def test_forgot_password_submitted_info_is_html_escaped
+    @app = mounted_app '/', forgot_password_uri: '/forgot-password'
+    post('/', {
+      'cerberus_login' => '<script>bad</script>', 
+      'cerberus_pass' => '<script>bad</script>'
+    })
+    assert_match 'bad', body
+    refute_match '<script>bad</script>', body
+  end
+
 end
 
