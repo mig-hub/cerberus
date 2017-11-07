@@ -124,77 +124,85 @@ module Rack
 
     AUTH_PAGE = <<-PAGE
     <!DOCTYPE html>
-    <html><head>
-      <title>%{company_name} Authentication</title>
-      <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-      <style type='text/css'>
-      * {
-        -moz-box-sizing: border-box;
-        -ms-box-sizing: border-box;
-        box-sizing: border-box;
-      }
-      body { background-color: %{bg_color}; font-family: sans-serif; text-align: center; margin: 0px; }
-      h1, p { color: %{text_color}; }
-      .err {
-        padding: 1em;
-        border-radius: 3px;
-        -moz-border-radius: 3px;
-        -webkit-border-radius: 3px;
-        color: white;
-        background-color: #dc322f;
-      }
-      div { 
-        text-align: left;
-        width: 500px;
-        margin: 0px auto;
-        padding: 2em;
-        -webkit-border-bottom-left-radius: 3px;
-        -moz-border-radius-bottomleft: 3px;
-        border-bottom-left-radius: 3px;
-        -webkit-border-bottom-right-radius: 3px;
-        -moz-border-radius-bottomright: 3px;
-        border-bottom-right-radius: 3px;
-        -moz-box-shadow: 0px 0px 5px #333;
-        -webkit-box-shadow: 0px 0px 5px #555;
-        box-shadow: 0px 0px 5px #555;
-        background-color: %{fg_color}; }
-      input[type=text], input[type=password] { 
-        display: block; width: 100%%; padding: 0.5em; 
-        border: 0px; font-size: 1.25em; 
-        background-color: %{text_color};
-      }
-      input[type=submit] {
-        background-color: %{bg_color};
-        color: %{fg_color};
-        padding: 0.5em;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        border: 0;
-        cursor: pointer;
-      }
-      input[type=submit]:hover { background-color: %{text_color}; }
-      ::-webkit-input-placeholder { color: %{bg_color}; }
-      :-moz-placeholder { color: %{bg_color}; }
-      ::-moz-placeholder { color: %{bg_color}; }
-      :-ms-input-placeholder { color: %{bg_color}; }
-      </style>
-      %{css}
-    </head><body>
-    <div>
-      <h1>%{company_name}</h1>
-      %{icon}
-      %{error}
-      <p>Please Sign In</p>
-      <form action="%{submit_path}" method="post" accept-charset="utf-8">	
-        <input type="text" name="cerberus_login" value="%{login}" id='login' title='Login' placeholder='Login'><br />
-        <input type="password" name="cerberus_pass" value="%{pass}" id='pass' title='Password' placeholder='Password'>
-        <input type="hidden" name="_method" value="%{request_method}">
-        <p><input type="submit" value="SIGN IN &rarr;"></p>
-      </form>
-      %{forgot_password}
-    </div>
-    </body></html>
+    <html>
+      <head>
+        <title>%{company_name} Authentication</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <style type='text/css'>
+          * {
+            -moz-box-sizing: border-box; 
+            -ms-box-sizing: border-box;
+            box-sizing: border-box;
+          }
+          body { 
+            background-color: %{bg_color}; 
+            font-family: sans-serif; 
+            text-align: center; 
+            margin: 0px; 
+          }
+          h1, p { color: %{text_color}; }
+          .err {
+            padding: 1em;
+            -moz-border-radius: 3px; 
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            background-color: #dc322f; color: white; 
+          }
+          div { 
+            text-align: left; 
+            width: 500px;
+            margin: 0px auto; padding: 2em;
+            -webkit-border-bottom-left-radius: 3px;
+            -moz-border-radius-bottomleft: 3px;
+            border-bottom-left-radius: 3px;
+            -webkit-border-bottom-right-radius: 3px;
+            -moz-border-radius-bottomright: 3px;
+            border-bottom-right-radius: 3px;
+            -moz-box-shadow: 0px 0px 5px #333;
+            -webkit-box-shadow: 0px 0px 5px #555;
+            box-shadow: 0px 0px 5px #555;
+            background-color: %{fg_color}; 
+          }
+          input[type=text], input[type=password] { 
+            display: block; 
+            width: 100%%; 
+            padding: 0.5em; 
+            border: 0px; 
+            font-size: 1.25em; 
+            background-color: %{text_color};
+          }
+          input[type=submit] {
+            background-color: %{bg_color}; color: %{fg_color};
+            padding: 0.5em; border: 0;
+            -webkit-appearance: none; 
+            -moz-appearance: none;
+            appearance: none;
+            cursor: pointer;
+          }
+          input[type=submit]:hover { background-color: %{text_color}; }
+          ::-webkit-input-placeholder { color: %{bg_color}; }
+          :-moz-placeholder { color: %{bg_color}; }
+          ::-moz-placeholder { color: %{bg_color}; }
+          :-ms-input-placeholder { color: %{bg_color}; }
+        </style>
+        %{css}
+      </head>
+      <body>
+        <div>
+          <h1>%{company_name}</h1>
+          %{icon}
+          %{error}
+          <p>Please Sign In</p>
+          <form action="%{submit_path}" method="post" accept-charset="utf-8">	
+            <input type="text" name="cerberus_login" value="%{login}" id='login' title='Login' placeholder='Login'><br />
+            <input type="password" name="cerberus_pass" value="%{pass}" id='pass' title='Password' placeholder='Password'>
+            <input type="hidden" name="_method" value="%{request_method}">
+            <p><input type="submit" value="SIGN IN &rarr;"></p>
+          </form>
+          %{forgot_password}
+        </div>
+      </body>
+    </html>
     PAGE
     
     FORGOT_PASSWORD = <<-FORM
