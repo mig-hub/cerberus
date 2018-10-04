@@ -150,7 +150,7 @@ module Rack
           }
           div { 
             text-align: left; 
-            width: 500px;
+            max-width: 500px;
             margin: 0px auto; padding: 2em;
             -webkit-border-bottom-left-radius: 3px;
             -moz-border-radius-bottomleft: 3px;
