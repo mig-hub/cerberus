@@ -9,8 +9,6 @@ module Rack
     
     class NoSessionError < RuntimeError; end
 
-    def self.new(*); ::Rack::MethodOverride.new(super.freeze); end
-
     DEFAULTS = { 
       company_name: 'Cerberus', 
       bg_color: '#93a1a1', 
@@ -21,7 +19,7 @@ module Rack
     }.freeze
     
     def initialize app, options={}, &block
-      @app = app
+      @app = ::Rack::MethodOverride.new(app)
       @options = DEFAULTS.merge(options)
       @options[:icon] = @options[:icon_url].nil? ? 
         '' : 
