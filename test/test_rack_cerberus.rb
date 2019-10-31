@@ -14,7 +14,7 @@ class TestRackCerberus < Minitest::Test
       [
         200, 
         {'Content-Type'=>'text/plain'}, 
-        "#{env['REQUEST_METHOD']} #{env['rack.session'].inspect}"
+        ["#{env['REQUEST_METHOD']} #{env['rack.session'].inspect}"]
       ] 
     }
   end
@@ -31,7 +31,7 @@ class TestRackCerberus < Minitest::Test
     })
   end
 
-  def app; @app; end
+  def app; Rack::Lint.new(@app); end
 
   def body
     last_response.body
