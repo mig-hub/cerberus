@@ -104,7 +104,7 @@ class TestRackCerberus < Minitest::Test
     get '/'
     assert_match 'name="_method" value="GET"', body
     post '/', correct_logins.merge({'_method'=>'GET'})
-    assert_match /^GET/, body
+    assert_match(/^GET/, body)
   end
   
   def test_stay_authorized_once_logged
@@ -155,22 +155,22 @@ class TestRackCerberus < Minitest::Test
     @app = mounted_app '/', forgot_password_uri: '/forgot-password'
     post '/', wrong_logins
     assert_equal 401, last_response.status
-    assert_match /form action="\/forgot-password" method="post"/, body
-    assert_match /type="hidden" name="cerberus_login" value="fake_login"/, body
+    assert_match(/form action="\/forgot-password" method="post"/, body)
+    assert_match(/type="hidden" name="cerberus_login" value="fake_login"/, body)
   end
 
   def test_forgot_password_uri_when_logins_not_provided
     @app = mounted_app '/', forgot_password_uri: '/forgot-password'
     post '/'
     assert_equal 401, last_response.status
-    refute_match /form action="\/forgot-password" method="post"/, body
-    refute_match /type="hidden" name="cerberus_login" value="fake_login"/, body
+    refute_match(/form action="\/forgot-password" method="post"/, body)
+    refute_match(/type="hidden" name="cerberus_login" value="fake_login"/, body)
   end
 
   def test_no_forgot_password_form_when_no_uri
     post '/', wrong_logins
     assert_equal 401, last_response.status
-    refute_match /form action="\/forgot-password" method="post"/, body
+    refute_match(/form action="\/forgot-password" method="post"/, body)
   end
 
   def test_forgot_password_submitted_info_is_html_escaped
