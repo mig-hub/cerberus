@@ -92,7 +92,7 @@ module Rack
 
     def logout_response req
       res = Rack::Response.new
-      res.redirect(req.script_name=='' ? '/' : req.script_name)
+      res.redirect(req.script_name.empty? ? '/' : req.script_name)
       res.finish
     end
 
