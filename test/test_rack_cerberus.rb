@@ -11,10 +11,11 @@ class TestRackCerberus < Minitest::Test
 
   def secret_app
     lambda {|env| 
+      req = Rack::Request.new env
       [
         200, 
         {'Content-Type'=>'text/plain'}, 
-        ["#{env['REQUEST_METHOD']} #{env['rack.session'].inspect}"]
+        ["#{env['REQUEST_METHOD']} #{req.fullpath} #{env['rack.session'].inspect}"]
       ] 
     }
   end
@@ -101,10 +102,11 @@ class TestRackCerberus < Minitest::Test
   end
 
   def test_calls_final_page_with_original_method
-    get '/'
+    get '/foo/bar?var=1'
     assert_match 'name="_method" value="GET"', body
-    post '/', correct_logins.merge({'_method'=>'GET'})
-    assert_match(/^GET/, body)
+    assert_match 'action="/foo/bar?var=1"', body
+    post '/foo/bar?var=1', correct_logins.merge({'_method'=>'GET'})
+    assert body.start_with?('GET /foo/bar?var=1 ')
   end
   
   def test_stay_authorized_once_logged

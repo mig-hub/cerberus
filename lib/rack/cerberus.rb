@@ -123,7 +123,7 @@ module Rack
       [
         401, HTML_HEADERS, 
         [AUTH_PAGE % @options.merge({
-          error: error, submit_path: h(req.env['REQUEST_URI']),
+          error: error, submit_path: req.fullpath,
           forgot_password: forgot_password,
           request_method: req.request_method,
           login: h(login(req)), 
