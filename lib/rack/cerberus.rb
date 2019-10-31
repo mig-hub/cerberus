@@ -7,7 +7,7 @@ module Rack
     
     class NoSessionError < RuntimeError; end
 
-    def self.new(*); ::Rack::MethodOverride.new(super); end
+    def self.new(*); ::Rack::MethodOverride.new(super.freeze); end
     
     def initialize app, options={}, &block
       @app = app
@@ -30,10 +30,6 @@ module Rack
     end
     
     def call env
-      dup._call(env)
-    end
-    
-    def _call env
       ensure_session env
       req = Rack::Request.new env
       if (logged?(req) and !logging_out?(req)) or authorized?(req)

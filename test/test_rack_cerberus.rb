@@ -22,7 +22,7 @@ class TestRackCerberus < Minitest::Test
   def cerberus_app cerberus_options={}
     Rack::Cerberus.new(secret_app, cerberus_options) do |login,pass| 
       [login,pass]==['mario@nintendo.com','bros']
-    end
+    end.freeze
   end
 
   def mounted_app mount_path='/', cerberus_options={}
