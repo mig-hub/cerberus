@@ -31,8 +31,8 @@ module Rack
     end
     
     def call env
-      ensure_session env
       req = Rack::Request.new env
+      ensure_session req
       if (logged?(req) and !logging_out?(req)) or authorized?(req)
         ensure_logged! req
         if logging_out? req
@@ -47,8 +47,12 @@ module Rack
 
     private
 
-    def ensure_session env
-      if env['rack.session'].nil?
+    def session req
+      req.env['rack.session']
+    end
+
+    def ensure_session req
+      if session(req).nil?
         raise(NoSessionError, 'Cerberus cannot work without Session') 
       end
     end
@@ -57,16 +61,20 @@ module Rack
       Rack::Utils.escape_html text
     end
 
+    CERBERUS_LOGIN = 'cerberus_login'
+
     def login req
-      req.params['cerberus_login']
+      req.params[CERBERUS_LOGIN]
     end
 
+    CERBERUS_PASS = 'cerberus_pass'
+
     def pass req
-      req.params['cerberus_pass']
+      req.params[CERBERUS_PASS]
     end
 
     def logged? req
-      req.env['rack.session'][@options[:session_key]]!=nil
+      not session(req)[@options[:session_key]].nil?
     end
 
     def provided_fields? req
@@ -79,15 +87,17 @@ module Rack
     end
 
     def ensure_logged! req
-      req.env['rack.session'][@options[:session_key]] ||= login(req)
+      session(req)[@options[:session_key]] ||= login(req)
     end
 
     def ensure_logged_out! req
-      req.env['rack.session'].delete @options[:session_key]
+      session(req).delete @options[:session_key]
     end
 
+    LOGOUT_PATH = '/logout'
+
     def logging_out? req
-      req.path_info=='/logout'
+      req.path_info == LOGOUT_PATH
     end
 
     def logout_response req
@@ -96,9 +106,12 @@ module Rack
       res.finish
     end
 
+    ERROR_HTML_MSG = '<p class=\'err\'>Wrong login or password</p>'
+    HTML_HEADERS = {'Content-Type' => 'text/html'}
+
     def form_response req
       if provided_fields? req
-        error = "<p class='err'>Wrong login or password</p>"
+        error = ERROR_HTML_MSG
         unless @options[:forgot_password_uri].nil?
           forgot_password = FORGOT_PASSWORD % {
             action: @options[:forgot_password_uri],
@@ -108,7 +121,7 @@ module Rack
       end
       ensure_logged_out! req
       [
-        401, {'Content-Type' => 'text/html'}, 
+        401, HTML_HEADERS, 
         [AUTH_PAGE % @options.merge({
           error: error, submit_path: h(req.env['REQUEST_URI']),
           forgot_password: forgot_password,
